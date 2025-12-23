@@ -58,5 +58,5 @@ resource "local_file" "ansible_inventory" {
     ec2_ips = [module.ec2_app.public_ip]
     env = var.env
   })
-  filename = "${path.module}/ansible/inventory.ini"
+  filename = "${path.module}/../../../ansible/inventory-${var.env}.ini"
 }

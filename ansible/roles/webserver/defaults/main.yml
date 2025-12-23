@@ -1,0 +1,9 @@
+source_control_package: git
+webserver_type: nginx
+webserver_package: nginx
+webserver_service: nginx
+webserver_owner: nginx
+webserver_config_template: nginx_portfolio.conf.j2
+webserver_config_path: /etc/nginx/conf.d/portfolio.conf
+repo_url: "https://github.com/huddlesk/kevin-huddleston-portfolio.git"
+app_root: "/var/www/portfolio"
