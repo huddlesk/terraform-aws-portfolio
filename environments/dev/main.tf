@@ -52,3 +52,11 @@ output "ec2_public_ip" {
 output "static_site_url" {
   value = module.s3_static_site.website_endpoint
 }
+
+resource "local_file" "ansible_inventory" {
+  content = templatefile("${path.module}/ansible_inventory.tpl", {
+    ec2_ips = [module.ec2_app.public_ip]
+    env = var.env
+  })
+  filename = "${path.module}/ansible/inventory.ini"
+}

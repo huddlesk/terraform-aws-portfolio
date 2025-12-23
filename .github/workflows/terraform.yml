@@ -20,3 +20,13 @@ jobs:
         cd environments/${{ matrix.env }}
         terraform validate
         terraform plan -var-file="terraform.tfvars"
+  ansible:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run Ansible Playbook
+      uses: dawidd6/ansible-playbook-action@v2
+      with:
+        playbook: environments/${{ matrix.env }}/ansible/playbook.yml
+        inventory: environments/${{ matrix.env }}/ansible/inventory.ini

@@ -1,0 +1,68 @@
+---
+- name: Serve portfolio via Nginx
+  hosts: ec2_instances_dev
+  become: yes
+
+  vars:
+    repo_url: "https://github.com/huddlesk/kevin-huddleston-portfolio.git"
+    app_root: "/var/www/portfolio"
+
+  tasks:
+    - name: Install Git
+      ansible.builtin.dnf:
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Install Nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Enable and start Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Ensure app root exists
+      ansible.builtin.file:
+        path: "{{ app_root }}"
+        state: directory
+        owner: nginx
+        group: nginx
+        mode: "0755"
+
+    - name: Clone portfolio repo
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_root }}"
+        version: main
+        update: no
+        accept_hostkey: yes
+      register: portfolio_clone
+
+    - name: Set permissions on app root
+      ansible.builtin.file:
+        path: "{{ app_root }}"
+        owner: nginx
+        group: nginx
+        mode: "0755"
+        recurse: yes
+
+    - name: Configure Nginx site
+      ansible.builtin.template:
+        src: nginx_portfolio.conf.j2
+        dest: /etc/nginx/conf.d/portfolio.conf
+      notify: Reload nginx
+
+    - name: Test Nginx config
+      ansible.builtin.command: nginx -t
+      changed_when: false
+
+  handlers:
+    - name: Reload nginx
+      ansible.builtin.service:
+        name: nginx
+        state: reloaded

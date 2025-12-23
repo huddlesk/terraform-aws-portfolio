@@ -15,5 +15,14 @@ module "s3_bucket" {
   ignore_public_acls = false
   restrict_public_buckets = false
 
+  force_destroy = true
+
   tags = var.tags
+}
+
+resource "aws_s3_bucket_ownership_controls" "owner_enforcement" {
+  bucket = module.s3_bucket.s3_bucket_id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
+  }
 }
