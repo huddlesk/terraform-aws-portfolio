@@ -1,4 +1,4 @@
-# Terraform AWS Portfolio Environment
+# IaC AWS Portfolio Environment (Terraform/Ansible)
 
 This repository defines a small, production‑style AWS environment using Terraform and Ansible, designed to showcase Infrastructure as Code, modular design, and CI/CD‑friendly structure for Release, DevOps and Cloud roles.
 
