@@ -22,10 +22,9 @@ steps:
     terraformVersion: 'latest'
 - task: TerraformTask@5
   inputs:
-    provider: 'aws'
     command: 'init'
     workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/environments/dev'
-    backendServiceAWS: 'aws-tf-connection'
+    environmentServiceNameAWSConnection: 'aws-tf-connection'
   env:
     AWS_DEFAULT_REGION: 'us-east-1'  # Optional override
 - task: TerraformTaskV4@4
